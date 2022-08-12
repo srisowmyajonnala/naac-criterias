@@ -1,0 +1,1092 @@
+
+<html>
+    <head>
+        <title> Criteria 6</title>
+        <link rel="stylesheet" href="project6.css"/>
+    </head>
+    <body>
+    <div class = "table-grid">
+
+       <!--<table border = "5px" bordercolor = "blue" > -->
+        <div class = "colour-blue">
+             <p> <b> 6.1 Instituational Vision and Leadership </b> </p> 
+        </div>
+
+      <div class = "margin-container">
+          <p> <b> 6.1.1 The governance of institution is reflective of with mission and vision of the institution </b>  <button class="btn help">Help</button> </p>
+          <title></title>
+           <!-- Ignite UI for jQuery Required Combined CSS Files -->
+    <link href="http://cdn-na.infragistics.com/igniteui/2022.1/latest/css/themes/infragistics/infragistics.theme.css" rel="stylesheet" />
+    <link href="http://cdn-na.infragistics.com/igniteui/2022.1/latest/css/structure/infragistics.css" rel="stylesheet" />
+
+    <script src="http://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.8.3.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <!-- Ignite UI for jQuery Required Combined JavaScript Files -->
+    <script src="http://cdn-na.infragistics.com/igniteui/2022.1/latest/js/infragistics.core.js"></script>
+    <script src="http://cdn-na.infragistics.com/igniteui/2022.1/latest/js/infragistics.lob.js"></script>
+
+</head>
+<body>
+    <style type="text/css">
+        #htmlEditor {
+            margin-bottom: 10px;
+        }
+
+        #text_collapseButton,
+        #formatting_collapseButton {
+            display: none;
+        }
+
+        #toolbarHolder {
+            z-index: 99999;
+        }
+
+		/* Override sample's browser styles */
+    	#htmlEditor h1, #htmlEditor h2, #htmlEditor h3, #htmlEditor h4, #htmlEditor h5, #htmlEditor h6 { margin: 0px; }
+    	#htmlEditor h1 { font-size: 1.9em; }
+		#sampleContainer { overflow: visible; }
+
+    </style>
+
+    <!--igHtmlEditor target element-->
+    <div id="htmlEditor">
+        Use the fastest jQuery grid on the market to get more interactivity out of your static HTML tables and data. Our latest iteration offers more line of business features, along with our unrivalled quality and performance.
+    </div>
+
+    <div id="toolbarHolder">
+        <div id="text"></div>
+    </div>
+
+    <script>
+        function getSelectionCoords() {
+            var sel = window.frames[0].document.selection, range;
+            var x = 0, y = 0;
+            if (sel) {
+                if (sel.type != "Control") {
+                    range = sel.createRange();
+                    range.collapse(true);
+                    x = range.boundingLeft;
+                    y = range.boundingTop;
+                }
+            } else if (window.frames[0].document.getSelection) {
+                sel = window.frames[0].document.getSelection();
+                if (sel.rangeCount) {
+                    range = sel.getRangeAt(0).cloneRange();
+                    if (range.getClientRects) {
+                        range.collapse(true);
+                        var rect = range.getClientRects()[0];
+                        if (rect) {
+                            x = rect.left;
+                            y = rect.top;
+                        }
+                    }
+                }
+            }
+
+            return {
+                x: x,
+                y: y + 118
+            };
+        }
+
+        function selectionIs(sel, state) {
+            var range, isState = false;
+            if (window.frames[0].document.getSelection) {
+                if (sel && sel.getRangeAt && sel.rangeCount) {
+                    range = sel.getRangeAt(0);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                }
+            }
+            if (window.frames[0].document.queryCommandState) {
+                isState = window.frames[0].document.queryCommandState(state);
+            }
+            return isState;
+        }
+
+        $(function () {
+            var $iframe,
+                mouseMoveCoord,
+                $htmlEditor = $("#htmlEditor"),
+                $toolbarHolder = $("#toolbarHolder"),
+                $textToolbar = $('#text'),
+                height = $('html').hasClass('touch') ? 500 : 350;
+
+            $toolbarHolder.hide();
+
+            $htmlEditor.igHtmlEditor({
+                width: "99%",
+                height: height,
+                inputName: "htmlEditor"
+            });
+
+            $textToolbar.igToolbar({
+                "name": "textToolbar",
+                "displayName": "Toolbar text",
+                "isExpanded": true,
+                "collapseButtonIcon": "ui-igbutton-collapse",
+                "expandButtonIcon": "ui-igbutton-expand",
+                "items": [{
+                    "name": "Bold",
+                    "type": "button",
+                    "scope": null,
+                    "props": {
+                        "allowToggling": {
+                            "value": true
+                        },
+                        "isBold": {
+                            "value": false,
+                            "action": "_isSelectedAction"
+                        },
+                        "boldButtonTooltip": {
+                            "value": "Bold",
+                            "action": "_tooltipAction"
+                        },
+                        "boldButtonIcon": {
+                            "value": "ui-igbutton-bold",
+                            "action": "_buttonIconAction"
+                        }
+                    }
+                }, {
+                    "name": "Italic",
+                    "type": "button",
+                    "props": {
+                        "isItalic": {
+                            "value": false,
+                            "action": "_isSelectedAction"
+                        },
+                        "italicButtonTooltip": {
+                            "value": "Italic",
+                            "action": "_tooltipAction"
+                        },
+                        "italicButtonIcon": {
+                            "value": "ui-igbutton-italic",
+                            "action": "_buttonIconAction"
+                        }
+                    }
+                }, {
+                    "name": "Underline",
+                    "type": "button",
+                    "props": {
+                        "isUnderline": {
+                            "value": false,
+                            "action": "_isSelectedAction"
+                        },
+                        "underlineButtonTooltip": {
+                            "value": "Underline",
+                            "action": "_tooltipAction"
+                        },
+                        "underlineButtonIcon": {
+                            "value": "ui-igbutton-underline",
+                            "action": "_buttonIconAction"
+                        }
+                    }
+                }]
+            });
+
+            $iframe = $('#htmlEditor_editor');
+
+            $iframe.contents().find("body").on("mouseup", function (ev) {
+                var userSelection,
+                    userSelectionString,
+                    $bold = $textToolbar.find("div[id*='Bold']"),
+                    $italic = $textToolbar.find("div[id*='Italic']"),
+                    $underline = $textToolbar.find("div[id*='Underline']"),
+                    coord = getSelectionCoords();
+
+                if (window.frames[0].document.getSelection) {
+                    userSelection = window.frames[0].document.getSelection();
+                    userSelectionString = userSelection.toString();
+                } else {
+                    userSelection = window.frames[0].document.selection.createRange();
+                    userSelectionString = userSelection.text;
+                }
+                if (userSelectionString !== "") {
+                    $toolbarHolder.parent().css({
+                        position: 'relative'
+                    });
+
+                    $toolbarHolder.css({
+                        top: coord.y,
+                        left: coord.x,
+                        position: 'absolute'
+                    });
+
+                    mouseMoveCoord = {
+                        x: ev.pageX,
+                        y: ev.pageY
+                    };
+
+                    if (selectionIs(userSelection, "bold")) {
+                        $bold.igToolbarButton("activate");
+                    }
+
+                    if (selectionIs(userSelection, "italic")) {
+                        $italic.igToolbarButton("activate");
+                    }
+
+                    if (selectionIs(userSelection, "underline")) {
+                        $underline.igToolbarButton("activate");
+                    }
+
+                    $iframe.contents().find("body").on("mousemove", function (ev) {
+                        if (userSelectionString !== "") {
+                            if (mouseMoveCoord &&
+                                ((Math.abs(mouseMoveCoord.x - ev.pageX) > 50) ||
+                                (Math.abs(mouseMoveCoord.y - ev.pageY) > 50))) {
+                                
+                                $toolbarHolder.fadeOut();
+                            } else {
+                                $toolbarHolder.fadeIn();
+                            }
+                        }
+                    });
+
+                    $iframe.contents().find("body").on("keydown", function (ev) {
+                        if (ev.keyCode === 66 && ev.ctrlKey) {
+                            $bold.igToolbarButton("toggle");
+                        }
+
+                        if (ev.keyCode === 73 && ev.ctrlKey) {
+                            $italic.igToolbarButton("toggle");
+                        }
+
+                        if (ev.keyCode === 85 && ev.ctrlKey) {
+                            $underline.igToolbarButton("toggle");
+                        }
+                    });
+
+                    $toolbarHolder.fadeIn();                   
+                } else {
+                    $iframe.contents().find("body").off("mousemove");
+                    $iframe.contents().find("body").off("keydown")
+
+                    $toolbarHolder.hide();
+                    if ($bold.igToolbarButton) {
+                        $bold.igToolbarButton("deactivate");
+                    }
+
+                    if ($italic) {
+                        $italic.igToolbarButton("deactivate");
+                    }
+
+                    if ($underline) {
+                        $underline.igToolbarButton("deactivate");
+                    }
+                }
+            });
+
+            $(document).on("igtoolbarbuttonclick", function (ev) {
+                var command = $(ev.target).attr("id").replace($textToolbar.attr("id") + "_item_", "");
+                $htmlEditor.igHtmlEditor("executeAction", command.toLowerCase());
+            });
+
+            $(document).on("ightmleditoractionexecuting", function (ev, ui) {
+                var $button = $textToolbar.find("div[id*='" + ui.actionName + "']");
+
+                if ($button.igToolbarButton) {
+                    $textToolbar.find("div[id*='" + ui.actionName + "']").igToolbarButton("toggle");
+                }
+            });
+        });
+    </script>
+
+</body>
+          <hr>       
+          <table class = "customers">
+            <tr>
+               <th> File Description</th>
+               <th> Template </th>
+               <th> Documents </th>
+            </tr>
+            <tr>
+                <td>Upload any additional information</td>
+                <td></td>
+                <td><button class="btn help">Upload</button>
+                    <span>&#63;</span></td>
+              </tr>
+              <tr>
+                <td>Paste link for additional information </td>
+                <td></td>
+                <td><input type="text"></td>
+              </tr>
+          </table>
+       </div>
+
+       <div class = "margin-container">
+        <p> <b> 6.1.2 The effective leadership is visible in various institutional practices such as decentralization and perspective management</b> </p>
+        <table></table>
+        <!--<button class="btn help">Help</button> --> 
+        
+        <textarea class="txtbox"></textarea>
+          <hr>
+        <table class = "customers">
+          
+          
+          <tr>
+             <th> File Description</th>
+             <th> Template </th>
+             <th> Documents </th>
+          </tr>
+          <tr>
+              <td>Upload any additional information</td>
+              <td></td>
+              <td><button class="btn help">Upload</button>
+                  <span>&#63;</span></td>
+            </tr>
+            <tr>
+              <td>Paste link for additional information </td>
+              <td></td>
+              <td><input type="text"></td>
+            </tr>
+        </table>
+     </div>
+
+       
+    
+    </body>
+    <hr>
+    <hr>
+
+    <body>
+        <div class = "table1-grid">
+    
+           <!--<table border = "5px" bordercolor = "blue" > -->
+            <div class = "colour-blue">
+                 <p> <b> 6.2 Statergy Development and Deployment </b> </p> 
+            </div>
+    
+           <div class = "margin-container">
+              <p> <b> 6.2.1 The institutional Statergic/Perspective plan is effectively deployed </b>  <button class="btn help">Help</button> </p>
+              <textarea class = "txtbox"></textarea>
+              <hr>
+              <table class = "customers">
+                <tr>
+                   <th> File Description</th>
+                   <th> Template </th>
+                   <th> Documents </th>
+                </tr>
+                <tr>
+                    <td>Upload any additional information</td>
+                    <td></td>
+                    <td><button class="btn help">Upload</button>
+                        <span>&#63;</span></td>
+                  </tr>
+                  <tr>
+                    <td>Statergic plan and deployment documents on the website</td>
+                    <td></td>
+                    <td> <input type="text"></td>
+                  </tr>
+                  <tr>
+                    <td>Link to the oronogram of the institution webpage </td>
+                    <td></td>
+                    <td><input type="text"></td>
+                  </tr>
+              </table>
+           </div>
+    
+           <div class = "margin1-container"> 
+
+            <p> <b> <div>6.2.3 Implementation of egovernance in areas of    &nbsp;&nbsp;   <input type = "radio">A.All of the above<input type = "radio">&nbsp;&nbsp; B.3 of the above<input type ="radio">C.2 of the above <input type="radio"> D.1 of the Above <input type="radio"> E.None of the Above  
+            </div> operation <br> <ul class = "no-bullets"><li> 1.Adminitration</li> <li>2.Finance and Accounts</li> <li>  3.Student Admission and Support </li> <li> 4.Examination  </li> </ul></b> </p>
+            
+           
+            <hr>
+            <table class = "customers">
+              <tr>
+                 <th> File Description</th>
+                 <th> Template </th>
+                 <th> Documents </th>
+              </tr>
+              <tr>
+                  <td>Screen shots of user interface</td>
+                  <td></td>
+                  <td><button class="btn help">Upload</button>
+                      <span>&#63;</span></td>
+                </tr>
+                <tr>
+                    <td>ERP(Enterprise Resource planning) Document</td>
+                    <td></td>
+                    <td><button class="btn help">Upload</button>
+                        <span>&#63;</span></td>
+                  </tr>
+                 
+                  <tr>
+                    <td>Details of Implementinh e-governance in areas of operation, administration etc</td>
+                    <td><a href="url">Data Template</td>
+                    <td><button class="btn help">Upload</button>
+                        <span>&#63;</span></td>
+                  </tr>
+                  <tr>
+                    <td>Any additional informartion</td>
+                    <td></a></td>
+                    <td><button class="btn help">Upload</button>
+                        <span>&#63;</span></td>
+                  </tr>
+                
+            </table>
+         
+    
+           
+        </div>
+        </body>
+
+        <hr> 
+        <hr>
+
+        <body>
+            <div class = "table3-grid">
+        
+               <!--<table border = "5px" bordercolor = "blue" > -->
+               <div class = "colour-blue">
+                <p> <b> 6.3 Faculty Empowerment Statergies </b> </p> 
+                </div>
+        
+               <div class = "margin-container">
+                  <p> <b> 6.3.1 The institution has effective measures for teaching and non teaching staff </b>  <button class="btn help">Help</button> </p>
+                  <textarea class = "txtbox"></textarea>
+                  <hr>
+                  <table class = "customers">
+                    <tr>
+                       <th> File Description</th>
+                       <th> Template </th>
+                       <th> Documents </th>
+                    </tr>
+                    <tr>
+                        <td>Upload any additional information</td>
+                        <td></td>
+                        <td><button class="btn help">Upload</button>
+                            <span>&#63;</span></td>
+                      </tr>
+                      <tr>
+                        <td>Paste link for additional information</td>
+                        <td></td>
+                        <td> <input type="text"></td>
+                      </tr>
+                      
+                  </table>
+               </div>
+               <div class = "margin-container">
+                 <p class = "text_matters"> <b> 6.2.3: Average percantage of teachers provided
+                    with financial support to attend conference/workshop and towards membership<br>
+                    fee of professional bodies during the last five  years <input> </b>
+                    <div class = "18">
+                      <p class = "text_matters"><b>6.3.2.1: Number of teacher provided with financial<br>
+                        support to attend conferences/workshops and towards membership fee of professional<br> 
+                        bodies year wise during the last five years 
+                       </b></p>
+                     <table class="table-2" border = 1px solid black>
+                        <tr>
+                            <th>2018-19</th>
+                            <th>2017-18</th>
+                            <th>2016-17</th>
+                            <th>2015-16</th>
+                            <th>2014-15</th>
+
+                        </tr>
+                        <td><input></td>
+                        <td><input></td>
+                        <td><input></td>
+                        <td><input></td>
+                        <td><input></td>
+                      </table>
+                    </div>
+                    <form>
+                        <div class = "adjustment-19">
+                            <form>
+                              <label><h3>Related input</h3><br>
+                                   Number of students year wise during last five year<br>
+                              </label>
+                              <table class="table-6" border = 1px solid black>
+                               <tr>
+                                <th>Year 1</th>
+                                <th>Year 2</th>
+                                <th>Year 3</th>
+                                <th>Year 4</th>
+                                <th>Year 5</th>
+                                
+                    
+                              </tr>
+                               <td>100</td>
+                               <td>100</td>
+                               <td>100</td>
+                               <td>100</td>
+                               <td>100</td>
+                               
+                            
+                             </table>
+                             <label for = "one" class ="heading-10">
+                              Total academic year considered : 5<br>
+                              </label>
+                            </form>
+              
+                            </div>
+                            <p>
+              
+                            </p>
+              
+                             <table  class="adjustment-9" border=1px solid black; >
+                              <tr class="color-1">
+                                  <th class = "coloring-9"> file description</th>
+                                  <th class= "coloring-10"> Template</th>
+                                  <th class = "coloring-11"> Documents</th>
+                              </tr>
+                              <tr>
+                                  <td>Upload any additional information<br>
+                                   </td>
+                                  <td> </td>
+                                  <td><button class="btn help">Upload</button>
+                                    <span>&#63;</span></td>
+                                  
+                              </tr>
+                             
+                              <tr>
+                                <td>Details of teacher provided with<br>
+                                finanical support to <br>
+                             attend conference workshop etc during the last five years</td> 
+                                <td> <a href ="#" class = "btn">Data Templete </td> 
+                                  <td><button class="btn help">Upload</button>
+                                    <span>&#63;</span></td>
+                      
+                              </tr>
+                              </table>
+                      
+              
+                             <p>
+                
+                             </p>
+              
+                              
+                          </div>
+                          <div class="marging-container-122">
+                            <div class ="adjustment-21">
+                              <p> <br> <div> <label for = "one" class ="heading-8"><h4>6.3.3: Average number of professional development<br>
+                                administrative traning programs organished by the institution for teaching and non <br>
+                               teaching staff during the last five years</h4> </label> </div> </p>
+                              <input id = "one" class "size" type=" text"/><br>
+                              
+                    
+                            
+                             <div class = "adjustment-17">
+                                 <p> <br> <label for = "one" class ="heading-8">6.3.3.1: Total number of professional<br>
+                                    development/administrative traning programs<br>
+                                    programmers organised by the institutional for <br>
+                                     teaching and non teaching year-wise during the last five years</label> </br> </p>
+                    
+                                  <table class="table-5" border = 1px solid black>
+                                   <tr>
+                                    <th>2018-19</th>
+                                    <th>2017-18</th>
+                                    <th>2016-17</th>
+                                    <th>2015-16</th>
+                                    <th>2014-15</th>
+                                    
+                        
+                                  </tr>
+                                   <td><input ></td>
+                                   <td><input></td>
+                                   <td><input></td>
+                                   <td><input></td>
+                                   <td><input></td>
+                        
+                                
+                                 </table>
+                                 <p>
+                    
+                                 </p>
+                             </div>
+                             <div class = "adjustment-19">
+                                  <form>
+                                    <label><h3>Related input</h3><br>
+                                         
+                                    </label>
+                                   
+                                    
+                                   <label for = "one" class ="heading-10">
+                                    Total academic year considered : 5<br>
+                                    </label>
+                                  </form>
+                    
+                                  </div>
+                                  <p>
+                    
+                                  </p>
+                    
+                                   <table  class="adjustment-9" border=1px solid black; >
+                                    <tr class="color-1">
+                                        <th class = "coloring-9"> file description</th>
+                                        <th class= "coloring-10"> Template</th>
+                                        <th class = "coloring-11"> Documents</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Upload any additional<br>
+                                        information<br> programs </td>
+                                        <td></td>
+                                        <td><button class="btn help">Upload</button>
+                                          <span>&#63;</span></td>
+                                        
+                                    </tr>
+                                   
+                                    <tr>
+                                      <td>Reports of the human<br>
+                                       Resource Development Centres(USC ASC or other<br>
+                                      revelant centres </td> 
+                                      <td>  </td> 
+                                      <td><button class="btn help">Upload</button>
+                                        <span>&#63;</span></td>
+                            
+                                    </tr>
+                                    <tr>
+                                        <td>Reports of Academic <br>
+                                        College of similar centres<br>
+                                         </td> 
+                                        <td>  </td> 
+                                        <td><button class="btn help">Upload</button>
+                                          <span>&#63;</span></td>
+                              
+                                      </tr>
+
+                                      <tr>
+                                        <td>Details of professional<br>
+                                         development/ administrative training Prorammes organized by the <br>
+                                          University for teaching and non teaching staff</td> 
+                                        <td><a href ="#" class = "btn">Data Templete </td> 
+                                         <td><button class="btn help">Upload</button>
+                                          <span>&#63;</span></td>
+                              
+                                      </tr>
+                                      
+                                    </table>
+                                     <p>
+
+                                     </p>
+                                    <div class ="adjustment-16">
+                                        <label for = "one" class ="heading-8">6.3.4: Average percentage of teachers undergoing<br>
+                                        online/face-to-face Faculity Development Programmes<br>
+                                       (FDP)duing the last five years(Professional Development Programmer, Oriented/Induction Programme,<br>
+                                       Refresh Course,Short Team Course) </label>
+                                       <input id = "one" class "size" type=" text"/><br>
+                                       <p>
+                             
+                                       </p>
+                                      <div class = "adjustment-17">
+                                           <label for = "one" class ="heading-8">6.3.4.1: Total number of teachers<br>
+                                             attending development Programmes viz.,<br>
+                                             Orientation / Induction Programme, Refresher Course,Short<br>
+                                              Term Course year-wise during the last five years</label>
+                             
+                                           <table class="table-5" border = 1px solid black>
+                                            <tr>
+                                             <th>2018-19</th>
+                                             <th>2017-18</th>
+                                             <th>2016-17</th>
+                                             <th>2015-16</th>
+                                             <th>2014-15</th>
+                                             
+                                 
+                                           </tr>
+                                            <td><input ></td>
+                                            <td><input></td>
+                                            <td><input></td>
+                                            <td><input></td>
+                                            <td><input></td>
+                                 
+                                         
+                                          </table>
+                                          <p>
+                             
+                                          </p>
+                                      </div>
+                                      <div class = "adjustment-19">
+                                           <form>
+                                             <label><h3>Related input</h3><br>
+                                                  
+                                             </label>
+                                             <table class="table-6" border = 1px solid black>
+                                                <tr>
+                                                 <th>Year 1</th>
+                                                 <th>Year 2</th>
+                                                 <th>Year 3</th>
+                                                 <th>Year 4</th>
+                                                 <th>Year 5</th>
+                                                 
+                                     
+                                               </tr>
+                                                <td>100</td>
+                                                <td>100</td>
+                                                <td>100</td>
+                                                <td>100</td>
+                                                <td>100</td>
+                                                
+                                             
+                                              </table>
+                                             
+                                            <label for = "one" class ="heading-10">
+                                             Total academic year considered : 5<br>
+                                             </label>
+                                           </form>
+                             
+                                           </div>
+                                           <p>
+                             
+                                           </p>
+                             
+                                            <table  class="adjustment-9" border=1px solid black; >
+                                             <tr class="color-1">
+                                                 <th class = "coloring-9"> file description</th>
+                                                 <th class= "coloring-10"> Template</th>
+                                                 <th class = "coloring-11"> Documents</th>
+                                             </tr>
+                                             <tr>
+                                                 <td>Upload any additional<br>
+                                                 information</td>
+                                                 <td></td>
+                                                 <td><button class="btn help">Upload</button>
+                                                  <span>&#63;</span></td>
+                                                 
+                                             </tr>
+                                            
+                                             <tr>
+                                               <td>Reports of the human<br>
+                                                Resource Development Centres(USC ASC or other<br>
+                                               revelant centres </td> 
+                                               <td>  </td> 
+                                               <td><button class="btn help">Upload</button>
+                                                <span>&#63;</span></td>
+                                     
+                                             </tr>
+                                             <tr>
+                                                 <td>IQAC report summary <br>
+                                                
+                                                  </td> 
+                                                 <td>  </td> 
+                                                 <td><button class="btn help">Upload</button>
+                                                  <span>&#63;</span></td>
+                                       
+                                               </tr>
+         
+                                               <tr>
+                                                 <td>Details of teacher<br>
+                                                  attending professional development <br>
+                                                   programmes during the last five years</td> 
+                                                 <td><a href ="#" class = "btn">Data Templete </td> 
+                                                  <td><button class="btn help">Upload</button>
+                                                    <span>&#63;</span></td>
+                                       
+                                               </tr>
+                                               
+                                             </table>
+
+                                     
+                    
+                                   <p>
+                      
+                                   </p>
+          </div>                         
+      <div class = "margin-container-5">
+        <p> <b> 6.3.5: Institution Performs Appraisal System for teaching and non-teaching staff</b>  <button class="btn help">Help</button> </p>
+        <textarea class = "txtbox"></textarea>
+        <hr>       
+        <table class = "customers">
+          <tr>
+             <th> File Description</th>
+             <th> Template </th>
+             <th> Documents </th>
+          </tr>
+          <tr>
+              <td>Upload any additional information</td>
+              <td></td>
+              <td><button class="btn help">Upload</button>
+                  <span>&#63;</span></td>
+            </tr>
+            <tr>
+              <td>Paste link for additional information </td>
+              <td></td>
+              <td><input type="text"></td>
+            </tr>
+        </table>
+                <p>
+
+                </p>
+     </div>         
+         <p> </p>
+        <div class = "table4-grid">
+        
+            <!--<table border = "5px" bordercolor = "blue" > -->
+             <div class = "colour-blue">
+                  <p> <b> 6.4 Financial Management and Resource Mobilization </b> </p> 
+             </div>
+     
+             
+             <div class = "margin-container">
+                <p> <b> 6.4.1: Institution conducts internal and external financial audits regulart </b>  <button class="btn help">Help</button> </p>
+                <textarea class = "txtbox"></textarea>
+               <hr>
+               <table class = "customers">
+                 <tr>
+                    <th> File Description</th>
+                    <th> Template </th>
+                    <th> Documents </th>
+                 </tr>
+                 <tr>
+                     <td>Upload any additional information</td>
+                     <td></td>
+                     <td><button class="btn help">Upload</button>
+                         <span>&#63;</span></td>
+                   </tr>
+                   <tr>
+                     <td>Paste link for additional information</td>
+                     <td></td>
+                     <td> <input type="text"></td>
+                   </tr>
+                   
+               </table>
+             </div>
+               <div class="marging-container-122">
+                <div class ="adjustment-16">
+                   <label for = "one" class ="heading-8">6.4.2: Funds / Grants received from<br>
+                    non-governmentbodies,individuals,philanthropers <br>
+                   during the last five years(not-covered in Criterion lll)</label>
+                  <input id = "one" class "size" type=" text"/><br>
+                  <p>
+        
+                  </p>
+                 <div class = "adjustment-17">
+                      <label for = "one" class ="heading-8">6.4.2.1: Total Grants received from non-government<br>
+                        bodies,individuals,Philanthropers year wise during<br>
+                        the last five year(INR in lakhs)<br>
+                        </label>
+        
+                      <table class="table-5" border = 1px solid black>
+                       <tr>
+                        <th>2018-19</th>
+                        <th>2017-18</th>
+                        <th>2016-17</th>
+                        <th>2015-16</th>
+                        <th>2014-15</th>
+                        
+            
+                      </tr>
+                       <td><input ></td>
+                       <td><input></td>
+                       <td><input></td>
+                       <td><input></td>
+                       <td><input></td>
+            
+                    
+                     </table>
+                     <p>
+        
+                     </p>
+                 </div>
+                
+                      <p>
+        
+                      </p>
+        
+                       <table  class="adjustment-9" border=1px solid black; >
+                        <tr class="color-1">
+                            <th class = "coloring-9"> file description</th>
+                            <th class= "coloring-10"> Template</th>
+                            <th class = "coloring-11"> Documents</th>
+                        </tr>
+                        <tr>
+                            <td>Details of Funds/Grants<br>
+                            received from of the non-government bodies,individuals,Philanthropers<br> during the last five years </td>
+                            <td></td>
+                            <td><button class="btn help">Upload</button>
+                              <span>&#63;</span></td>
+                            
+                        </tr>
+                       
+                        <tr>
+                          <td>Any additional information<br>
+                           
+                          </td> 
+                          <td>  </td> 
+                          <td><button class="btn help">Upload</button>
+                            <span>&#63;</span></td>
+                
+                        </tr>
+                        <tr>
+                            <td>Annual statments of accounts <br>
+                            
+                             </td> 
+                            <td>  </td> 
+                            <td><button class="btn help">Upload</button>
+                              <span>&#63;</span></td>
+                  
+                          </tr>
+
+                          
+                        </table>
+               
+                
+             
+           </div>
+            <div class = "margin-container">
+              <p> <b> 6.4.3: Insitution strategies for mobilisation of funds and the optimal utilisation of resources  </b>  <button class="btn help">Help</button> </p>
+              <textarea class = "txtbox"></textarea>
+              <hr>       
+              <table class = "customers">
+                <tr>
+                   <th> File Description</th>
+                   <th> Template </th>
+                   <th> Documents </th>
+                </tr>
+                <tr>
+                    <td>Upload any additional information</td>
+                    <td></td>
+                    <td><button class="btn help">Upload</button>
+                        <span>&#63;</span></td>
+                  </tr>
+                  <tr>
+                    <td>Paste link for additional information </td>
+                    <td></td>
+                    <td><input type="text"></td>
+                  </tr>
+              </table>
+            </div>
+           <p>
+
+           </p>
+
+           <div class = "table66-grid">
+                       <div class = "colour-blue">
+                         <p> <b> 6.5 Internal Quality Assurance System </b> </p> 
+                        </div>
+    
+               <div  class = "margin-container">
+                <p> <b> 6.5.1 Internal Quality Assurance Cel(IQAC) has contributed significant for inttitution the quality assurance strategies and processes </b>  <button class="btn help">Help</button> </p>
+                 <textarea class = "txtbox"></textarea>
+                 <hr>
+                 <table class = "customers">
+                   <tr>
+                      <th> File Description</th>
+                      <th> Template </th>
+                      <th> Documents </th>
+                    </tr>
+                       <tr>
+                         <td>Upload any additional information</td>
+                          <td></td>
+                           <td><button class="btn help">Upload</button>
+                            <span>&#63;</span></td>
+                       </tr>
+                      <tr>
+                        <td>Paste link for additional information</td>
+                         <td></td>
+                         <td> <input type="text"></td>
+                      </tr>
+                  
+                  </table>
+               
+            </div>
+           <div class = "margin-container"> 
+            <p> <b> 6.5.2: The  institution reviews itsmteaching learning process,structures & methodologies of operations and <b>
+              outcomes at periodic intervals through IQAC set up as per norms and recorded the incremental improvement in various<br>
+              (For first cycle- Incremental improvements made for the preceding five years with regard to quality For secound<br>
+              and subsequent cycles Incremental improvements made for the preceding five years with regard to quality and post<br>
+              post accreditation quality intiatives))
+            </b> </p>
+            
+            <!--<button class="btn help">Help</button> --> <hr> <textarea class = "txtbox"></textarea>
+            <hr>
+            <table class = "customers">
+              <tr>
+                 <th> File Description</th>
+                 <th> Template </th>
+                 <th> Documents </th>
+              </tr>
+              <tr>
+                  <td>Upload any additional information</td>
+                  <td></td>
+                  <td><button class="btn help">Upload</button>
+                      <span>&#63;</span></td>
+                </tr>
+                <tr>
+                  <td>Paste link for additional information </td>
+                  <td></td>
+                  <td><input type="text"></td>
+                </tr>
+            </table>
+         </div>
+         <p>
+
+         </p>
+         <div class = "margin1-container"> 
+
+          <p> <b> <div>6.5.3: Quality assurance intiatives of the institution include:   &nbsp;&nbsp;   <input type = "radio">A.All of the above<input type = "radio">&nbsp;&nbsp; B.All of the above<input type ="radio">C.2 of the above <input type="radio"> D.1 of the Above <input type="radio"> E.None of the Above 
+          </div> operation <br> <ul class = "no-bullets"><li> 1.Regular meeting of Internal Quality Assurance Cell(QAC) Feedback collected. analysed and used for improvement</li> <li>2.Collabrative quality intitiatives with other institution(s)</li> <li>  3.Paticipations in NIRF</li> <li> 4.any other quality audit recognized by state. national or international agencies(ISO Certification.NBA)  </li> </ul></b> </p>
+          
+         
+          <hr>
+          <table class = "customers">
+            <tr>
+               <th> File Description</th>
+               <th> Template </th>
+               <th> Documents </th>
+            </tr>
+            <tr>
+                <td>Upload e-copies of the accreditations<br>
+                  and certifications
+                </td>
+                <td></td>
+                <td><button class="btn help">Upload</button>
+                    <span>&#63;</span></td>
+              </tr>
+              <tr>
+                  <td>Upload details of Quality<br>
+                  assurance initiatives of the institution</td>
+                  <td></td>
+                  <td><button class="btn help">Upload</button>
+                      <span>&#63;</span></td>
+                </tr>
+               
+                <tr>
+                  <td>Uploadt any additional information</td>
+                  <td><a href="url">Data Template</td>
+                  <td><button class="btn help">Upload</button>
+                      <span>&#63;</span></td>
+                </tr>
+                <tr>
+                  <td>Paste web link Annual<br>
+                  reports of institution</td>
+                  <td></a></td>
+                  <td><button class="btn help">Upload</button>
+                      <span>&#63;</span></td>
+                </tr>
+              
+          </table>
+          <td>
+            
+  
+         
+      </div>
+      <div class="w3-bar">
+        
+        <button class="w3-button w3-right w3-blue">Save </button>
+      </div>
+    
+    
+     </div>
+                                    
+                                </div>
+                                  
+                                 </div>
+                    
+                               </div>
+                            </div> 
+
+
+                </div>
+                
+                   
+              
+        
+               
+            </div>
+            </body>
+        
+</html>
